@@ -1,0 +1,39 @@
+#include "../../../utils/utils.h"
+#include "../../data.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+void carrosF() {
+  ArquivoResultado carro1 = lerLinhaALinha("assets/ascii/carros/carro_1.txt");
+  ArquivoResultado carro2 = lerLinhaALinha("assets/ascii/carros/carro_2.txt");
+  ArquivoResultado carro3 = lerLinhaALinha("assets/ascii/carros/carro_3.txt");
+
+  obterLargura();
+
+  // ativarAntes(antes);
+  // ativarDepois(depois);
+  // Any a[0];
+  // centralizarVertical(mostrarLogo, 8, a);
+  // esperar(1000);
+  // limpar();
+  // mostrarIntegrantes();
+  // esperar(1000);
+  // limpar();
+  // struct CarroTextos tabela;
+
+  String *textos[obterCarrosTamanho()];
+  int tamanhos[obterCarrosTamanho()];
+  for (int i = 0; i < obterCarrosTamanho(); i++) {
+    Carro carro = obterCarros()[i];
+    tamanhos[i] = carro.asciiTamanho + 2;
+    textos[i] = malloc((tamanhos[i]) * sizeof(String));
+    textos[i][0] = stringf(100, "%s", carro.nome);
+    copiarEm(textos[i], carro.ascii, 1, carro.asciiTamanho);
+
+    textos[i][carro.asciiTamanho + 1] = stringf(
+        100, "energia: %2.f/%.2f", carro.energiaAtual, carro.capacidade);
+  }
+
+  criarTabelaMultilinha(textos, len(textos), tamanhos, 2);
+  pausar();
+}
