@@ -1,6 +1,6 @@
 #ifndef InserirRecarga
 #define InserirRecarga
 
-void inserirRecarga();
+void inserirRecargaMenu();
 
 #endif

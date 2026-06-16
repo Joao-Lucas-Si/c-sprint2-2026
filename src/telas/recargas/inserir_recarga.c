@@ -5,14 +5,33 @@
 #include <stdlib.h>
 #include <string.h>
 Recarga *recarga;
-int salvando = 0;
+
+void definirRecargaCarro() {
+
+  String conteudo[obterCarrosTamanho()];
+  // int linhas[obterCarrosTamanho()];
+  for (int i = 0; i < obterCarrosTamanho(); i++) {
+    conteudo[i] = stringf(100, "%d. %s", i + 1, obterCarros()[i].nome);
+  }
+
+  int opcao = criarMenuSwitch("escolha de carro", conteudo, 3);
+
+  recarga->carroId = opcao - 1;
+}
 
 void definirRecargaPosto() {
-//   char nome[100];
-//   printf("nome: ");
-//   scanf("%s", nome);
 
-//   strcpy(posto->nome, nome);
+  int tamanho = obterPostosTamanho();
+
+  String conteudo[tamanho];
+  // int linhas[obterCarrosTamanho()];
+  for (int i = 0; i < tamanho; i++) {
+    conteudo[i] = stringf(100, "%d. %s", i + 1, obterPostos()[i].nome);
+  }
+
+  int opcao = criarMenuSwitch("escolha de posto", conteudo, 3);
+
+  recarga->postoId = opcao - 1;
 }
 
 void definirRecargaEnergia() {
@@ -23,78 +42,73 @@ void definirRecargaEnergia() {
   recarga->energia = energia;
 }
 
-void definirRecargaCarro() {
-//   int energia;
-//   printf("capacidade: ");
-//   scanf("%d", &energia);
+MenuConteudoDinamico criarRecargaConteudo() {
+  ArquivoResultado imagem = lerLinhaALinha("assets/ascii/opcoes/recarga.txt");
 
-//   posto->capacidade = energia;
+  int previewTamanho = imagem.linhas + 6;
+  String *preview = malloc(previewTamanho * sizeof(String));
+
+  preview[0] = "preview";
+
+  copiarEm(preview, imagem.conteudo, 1, imagem.linhas);
+
+  int i = imagem.linhas + 1;
+  int carros = obterCarrosTamanho();
+  Carro *carro = &obterCarros()[recarga->carroId];
+  Posto *posto = &obterPostos()[recarga->postoId];
+  preview[i] = stringf(100, "carro: %s", carro->nome);
+  preview[i + 1] = "";
+  preview[i + 2] = stringf(100, "posto: %s", posto->nome);
+  preview[i + 3] = "";
+  preview[i + 4] = stringf(100, "energia: %d", recarga->energia);
+  // preview[i + 5] = "";
+  // preview[i + 6] = stringf(100, "capacidade por hora: %d", recarga->energia);
+  // preview[i + 7] = "";
+  // preview[i + 8] =
+  //     stringf(100, "limite de veiculos simultaneos: %d", recarga->energia);
+
+  String opcoes[9] = {"0. fechar",         "", "1. escolher carro", "",
+                      "2. escolher posto", "", "3. mudar energia", "", "4. salvar"};
+
+  String *tabela[2] = {preview, opcoes};
+  int tamanhos[2] = {previewTamanho, len(opcoes)};
+  MenuConteudoDinamico resultado = {.conteudo = tabela, .tamanho = tamanhos};
+
+  return resultado;
 }
 
-void salvarPosto() {
-//   if (!salvando) {
-//     adicionarPosto(*posto);
-//     salvando = 1;
-//     posto = &obterPostos()[obterPostosTamanho() - 1];
-//   }
-}
+void inserirRecargaMenu() {
 
-MenuConteudoDinamico criarConteudo() {
-//   ArquivoResultado imagem = lerLinhaALinha("assets/ascii/opcoes/posto.txt");
+  recarga = malloc(sizeof(Recarga));
+  recarga->energia = 100;
+  recarga->carroId = 0;
+  recarga->postoId = 0;
+  recarga->dia = 0;
+  recarga->horario = 0;
 
-//   int previewTamanho = imagem.linhas + 10;
-//   String *preview = malloc(previewTamanho * sizeof(String));
+  OpcaoMenu opcoes[3] = {definirRecargaCarro, definirRecargaPosto,
+                         definirRecargaEnergia};
+  while (1) {
 
-//   preview[0] = "preview";
+    int selecionado = _criarMenuMultilinhaSwitchDinamico(
+        "edição de posto", criarRecargaConteudo, 2, 2);
 
-//   copiarEm(preview, imagem.conteudo, 1, imagem.linhas);
-
-//   int i = imagem.linhas + 1;
-
-//   preview[i] = stringf(100, "nome: %s", posto->nome);
-//   preview[i + 1] = "";
-//   preview[i + 2] = stringf(100, "energia por dia: %d", posto->energiaPorDia);
-//   preview[i + 3] = "";
-//   preview[i + 4] = stringf(100, "energia maxima: %d", posto->maximo);
-//   preview[i + 5] = "";
-//   preview[i + 6] = stringf(100, "capacidade por hora: %d", posto->capacidade);
-//   preview[i + 7] = "";
-//   preview[i + 8] =
-//       stringf(100, "limite de veiculos simultaneos: %d", posto->maxVeiculos);
-
-//   String opcoes[13] = {"0. fechar",
-//                        "",
-//                        "1. mudar nome",
-//                        "",
-//                        "2. mudar energia por dia",
-//                        "",
-//                        "3. mudar energia maxima",
-//                        "",
-//                        "4. mudar capacidade",
-//                        "",
-//                        "5. mudar limite de veiculos",
-//                        "",
-//                         salvando ? "" :"6. salvar"};
-
-//   String *tabela[2] = {preview, opcoes};
-//   int tamanhos[2] = {previewTamanho, len(opcoes)};
-//   MenuConteudoDinamico resultado  = {.conteudo = tabela, .tamanho = tamanhos};
-
-//   return resultado;
-}
-
-void inserirPostoMenu() {
-//   if (salvando) {
-
-//   } else {
-//     posto = malloc(sizeof(Posto));
-//     posto->maximo = 100;
-//     posto->capacidade = 40;
-//     posto->maxVeiculos = 2;
-//     posto->energiaPorDia = 60;
-//     posto->nome[0] = '\0';
-//   }
-//   OpcaoMenu opcoes[6] = { mudarPostoNome, mudarEnergiaDia, mudarEnergiaMaxima, mudarPostoCapacidade, mudarLimiteVeiculos, salvarPosto };
-//   _criarMenuMultilinhaDinamica("edição de posto", criarConteudo, opcoes,
-//                                len(opcoes), 2, 2);
+    if (selecionado == 0) {
+      break;
+    }
+    selecionado--;
+    switch (selecionado) {
+    case 0:
+    case 1:
+    case 2:
+      opcoes[selecionado]();
+      break;
+    case 3:
+      adicionarRecarga(*recarga);
+      return;
+    default:
+      mostrarErro("opção invalida");
+      break;
+    }
+  }
 }

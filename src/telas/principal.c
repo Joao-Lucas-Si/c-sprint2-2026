@@ -26,7 +26,7 @@ void menuPrincipal() {
       lerLinhaALinha("assets/ascii/opcoes/recarga.txt");
   ArquivoResultado relogio = lerLinhaALinha("assets/ascii/opcoes/horario.txt");
   ArquivoResultado carregamento = lerLinhaALinha("assets/ascii/opcoes/posto.txt");
-  OpcaoMenu opcoes[5] = {carrosMenu, postoMenu, passarTempo, opcaoRecarga, mostrarCreditos};
+  OpcaoMenu opcoes[5] = {carrosMenu, postoMenu, opcaoRecarga,  passarTempo, mostrarCreditos};
   String fechar[porta.linhas + 1];
   fechar[0] = "0. fechar";
   copiarEm(fechar, porta.conteudo, 1, porta.linhas);
@@ -45,19 +45,19 @@ void menuPrincipal() {
 
   String horario[relogio.linhas + 1];
 
-  horario[0] = "3. passar hora";
+  horario[0] = "4. passar hora";
   copiarEm(horario, relogio.conteudo, 1, relogio.linhas);
   String creditos[logo.linhas + 1];
   creditos[0] = "5. mostrar creditos";
   copiarEm(creditos, logo.conteudo, 1, logo.linhas);
   String recargas[carregamento.linhas + 1];
-  recargas[0] = "4. recargas";
+  recargas[0] = "3. recargas";
   copiarEm(recargas, carregamento.conteudo, 1, carregamento.linhas);
 
   String *tabela[6] = {fechar, visualizar,
-                       postos, horario,  recargas,  creditos};
+                       postos,   recargas, horario,  creditos};
   int tamanhos[6] = {len(fechar), len(visualizar),
-                     len(postos), len(horario), len(recargas),   len(creditos)};
+                     len(postos), len(recargas), len(horario),    len(creditos)};
 
   _criarMenuMultilinha("Sistema", tabela, opcoes, len(opcoes), len(tabela),
                        tamanhos, 3);

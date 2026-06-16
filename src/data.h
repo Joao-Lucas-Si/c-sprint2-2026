@@ -24,13 +24,11 @@ typedef struct {
 
 typedef struct {
   int carroId;
-  Carro* carro;
   int energia;
 
   int horario;
   int dia;
   int postoId;
-  Posto* posto;
 } Recarga;
 
 typedef enum {
@@ -57,7 +55,6 @@ typedef struct {
   Posto* postos;
   int postosTamanho;
   int semPostos;
-
   Recarga* recargas;
   int recargaTamanho;
   int semRecargas;
@@ -67,14 +64,17 @@ void iniciarBanco();
 
 int obterCarrosTamanho();
 Carro* obterCarros();
+Carro obterCarro(int);
 int obterPostosTamanho();
 Posto* obterPostos();
+Posto obterPosto(int);
 void adicionarCarro(Carro);
 void adicionarPosto(Posto);
 void adicionarRecarga(Recarga);
-Posto* obterRecargas();
+Recarga* obterRecargas();
 int obterRecargasTamanho();
 int obterHoras();
+int obterDias();
 void passarHoras(int);
 
 #endif

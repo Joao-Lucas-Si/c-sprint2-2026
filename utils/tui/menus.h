@@ -28,4 +28,7 @@ int _criarMenuSwitch(char *titulo, String *opcoes, int tamanho, int colunas);
 void _criarMenuMultilinha(String titulo, String **conteudo, OpcaoMenu *opcoes,
                           int quantidadeOpcoes, int tamanho, int *linhas,
                           int colunas);
+int _criarMenuMultilinhaSwitchDinamico(String titulo,
+                                  MenuConteudoDinamico (*gerarConteudo)(),
+                                  int tamanho, int colunas);
 #endif

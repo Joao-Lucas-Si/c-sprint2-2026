@@ -7,6 +7,7 @@ Data data;
 String dataSimplesCaminho = "assets/db/data-simples.bin";
 String carrosCaminho = "assets/db/carros.bin";
 String postosCaminho = "assets/db/postos.bin";
+String recargasCaminho = "assets/db/recargas.bin";
 
 void iniciarBanco() {
   if (arquivoExiste(dataSimplesCaminho)) {
@@ -15,13 +16,24 @@ void iniciarBanco() {
     ler_arquivo(data.carros, Carro, carrosCaminho);
     data.postos = malloc(data.postosTamanho * sizeof(Posto));
     ler_arquivo(data.postos, Posto, postosCaminho);
+    data.recargas = malloc(data.recargaTamanho * sizeof(Recarga));
+    ler_arquivo(data.recargas, Recarga, recargasCaminho);
+    
   } else {
     data.carrosTamanho = 0;
     data.carros = malloc(sizeof(Carro));
     data.horas = 12;
+    data.postosTamanho = 0;
+    data.recargaTamanho = 0;
+    data.recargas = malloc(sizeof(Recarga));
+    data.postos = malloc(sizeof(Posto));
   }
 
   for (int i = 0; i < data.carrosTamanho; i++) {
+    if (data.carros[i].modelo == 0) {
+      data.carros[i].modelo = 1;
+    }
+    debug(data.carros[i].modelo);
     ArquivoResultado arquivo = lerLinhaALinha(stringf(
         100, "assets/ascii/carros/carro_%d.txt", data.carros[i].modelo));
     data.carros[i].asciiTamanho = arquivo.linhas;
@@ -33,15 +45,27 @@ void salvar() {
   escreverArquivoUnico(&data, Data, dataSimplesCaminho);
   escreverArquivoTamanho(data.carros, data.carrosTamanho, Carro, carrosCaminho);
   escreverArquivoTamanho(data.postos, data.postosTamanho, Posto, postosCaminho);
+  escreverArquivoTamanho(data.recargas, data.recargaTamanho, Recarga, recargasCaminho);
 }
 
 int obterHoras() { return data.horas; }
 
+
+int obterDias() { return data.dias; }
+
 Carro *obterCarros() { return data.carros; }
+
+Carro obterCarro(int id) { return data.carros[id]; }
 
 int obterCarrosTamanho() { return data.carrosTamanho; }
 
 Posto *obterPostos() { return data.postos; }
+
+Posto obterPosto(int id) { return data.postos[id]; }
+
+Recarga *obterRecargas() { return data.recargas; }
+
+int obterRecargasTamanho() { return data.recargaTamanho; }
 
 int obterPostosTamanho() { return data.postosTamanho; }
 
@@ -72,15 +96,15 @@ void adicionarPosto(Posto posto) {
 }
 
 void adicionarRecarga(Recarga recarga) {
-  if (data.semPostos) {
-    data.postos[0] = posto;
-    data.semPostos = 0;
+  if (data.semRecargas) {
+    data.recargas[0] = recarga;
+    data.semRecargas = 0;
   } else {
-    data.postos =
-        realloc(data.postos, (data.postosTamanho + 1) * sizeof(Posto));
-    data.postos[data.postosTamanho] = posto;
+    data.recargas =
+        realloc(data.recargas, (data.recargaTamanho + 1) * sizeof(Recarga));
+    data.recargas[data.recargaTamanho] = recarga;
   }
-  data.postosTamanho++;
+  data.recargaTamanho++;
   salvar();
 }
 

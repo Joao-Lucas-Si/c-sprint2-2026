@@ -65,6 +65,45 @@ int _criarMenuSwitch(char *titulo, String *opcoes, int tamanho, int colunas) {
   return 0;
 }
 
+int _criarMenuMultilinhaSwitchDinamico(String titulo,
+                                  MenuConteudoDinamico (*gerarConteudo)(),
+                                  int tamanho, int colunas) {
+  enum Cor primario = obterPrimario();
+  int selecionado = 1;
+  while (selecionado != 0) {
+    int efeitos[] = {aplicarEfeitoCor(FUNDO_CLARO, primario), BOLD};
+    ativarEfeitosTamanho(efeitos, 2);
+    centralizar(titulo, ' ');
+    desativarEfeitos();
+    MenuConteudoDinamico conteudoDinamico = gerarConteudo();
+    // String **conteudo = ;
+    // int *linhas = ;
+    // for (int i = 0; i < tamanho; i++) {
+    //   for (int j = 0; j < linhas[i]; j++) {
+    //     if (conteudo[i] && conteudo[i][j]) {
+    //       printf("%s", conteudo[i][j]);
+    //     }
+    //   }
+    // }
+    criarTabelaMultilinha(conteudoDinamico.conteudo, tamanho, conteudoDinamico.tamanho, colunas);
+
+    printf("escolha: ");
+    scanf("%d", &selecionado);
+    limpar();
+
+    // if (selecionado == 0) {
+    //   break;
+    // }
+    if (selecionado < 0) {
+      mostrarErro("valor invalido\n");
+      continue;
+    }
+
+    return selecionado ;
+    limpar();
+  }
+}
+
 void _criarMenuMultilinhaDinamica(String titulo,
                                   MenuConteudoDinamico (*gerarConteudo)(),
                                   OpcaoMenu *opcoes, int quantidadeOpcoes,
@@ -77,8 +116,8 @@ void _criarMenuMultilinhaDinamica(String titulo,
     centralizar(titulo, ' ');
     desativarEfeitos();
     MenuConteudoDinamico conteudoDinamico = gerarConteudo();
-    String **conteudo = conteudoDinamico.conteudo;
-    int *linhas = conteudoDinamico.tamanho;
+    // String **conteudo = ;
+    // int *linhas = ;
     // for (int i = 0; i < tamanho; i++) {
     //   for (int j = 0; j < linhas[i]; j++) {
     //     if (conteudo[i] && conteudo[i][j]) {
@@ -86,7 +125,7 @@ void _criarMenuMultilinhaDinamica(String titulo,
     //     }
     //   }
     // }
-     criarTabelaMultilinha(conteudo, tamanho, linhas, colunas);
+    criarTabelaMultilinha(conteudoDinamico.conteudo, tamanho, conteudoDinamico.tamanho, colunas);
 
     printf("escolha: ");
     scanf("%d", &selecionado);

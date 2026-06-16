@@ -104,6 +104,7 @@ void inserir() {
     sprintf(carro->nome, "carro");
     carro->capacidade = 100.0;
     carro->energiaAtual = 100.0;
+    carro->modelo = 1;
     salvando = 0;
   } else {
     salvando = 1;
