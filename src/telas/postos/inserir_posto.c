@@ -15,13 +15,6 @@ void mudarPostoNome() {
   strcpy(posto->nome, nome);
 }
 
-void mudarEnergiaDia() {
-  int energia;
-  printf("energia por dia: ");
-  scanf("%d", &energia);
-
-  posto->energiaPorDia = energia;
-}
 
 void mudarPostoCapacidade() {
   int energia;
@@ -58,7 +51,7 @@ void salvarPosto() {
 MenuConteudoDinamico criarConteudo() {
   ArquivoResultado imagem = lerLinhaALinha("assets/ascii/opcoes/posto.txt");
 
-  int previewTamanho = imagem.linhas + 10;
+  int previewTamanho = imagem.linhas + 8;
   String *preview = malloc(previewTamanho * sizeof(String));
 
   preview[0] = "preview";
@@ -69,26 +62,22 @@ MenuConteudoDinamico criarConteudo() {
 
   preview[i] = stringf(100, "nome: %s", posto->nome);
   preview[i + 1] = "";
-  preview[i + 2] = stringf(100, "energia por dia: %d", posto->energiaPorDia);
+  preview[i + 2] = stringf(100, "energia maxima: %d", posto->maximo);
   preview[i + 3] = "";
-  preview[i + 4] = stringf(100, "energia maxima: %d", posto->maximo);
+  preview[i + 4] = stringf(100, "capacidade por hora: %d", posto->capacidade);
   preview[i + 5] = "";
-  preview[i + 6] = stringf(100, "capacidade por hora: %d", posto->capacidade);
-  preview[i + 7] = "";
-  preview[i + 8] =
+  preview[i + 6] =
       stringf(100, "limite de veiculos simultaneos: %d", posto->maxVeiculos);
 
-  String opcoes[13] = {"0. fechar",
+  String opcoes[11] = {"0. fechar",
                        "",
                        "1. mudar nome",
                        "",
-                       "2. mudar energia por dia",
+                       "2. mudar energia maxima",
                        "",
-                       "3. mudar energia maxima",
+                       "3. mudar capacidade",
                        "",
-                       "4. mudar capacidade",
-                       "",
-                       "5. mudar limite de veiculos",
+                       "4. mudar limite de veiculos",
                        "",
                         salvando ? "" :"6. salvar"};
 
@@ -107,10 +96,9 @@ void inserirPostoMenu() {
     posto->maximo = 100;
     posto->capacidade = 40;
     posto->maxVeiculos = 2;
-    posto->energiaPorDia = 60;
     posto->nome[0] = '\0';
   }
-  OpcaoMenu opcoes[6] = { mudarPostoNome, mudarEnergiaDia, mudarEnergiaMaxima, mudarPostoCapacidade, mudarLimiteVeiculos, salvarPosto };
+  OpcaoMenu opcoes[5] = { mudarPostoNome, mudarEnergiaMaxima, mudarPostoCapacidade, mudarLimiteVeiculos, salvarPosto };
   _criarMenuMultilinhaDinamica("edição de posto", criarConteudo, opcoes,
                                len(opcoes), 2, 2);
 }

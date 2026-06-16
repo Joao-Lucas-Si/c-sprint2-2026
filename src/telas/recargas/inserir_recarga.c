@@ -4,19 +4,42 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 Recarga *recarga;
 
 void definirRecargaCarro() {
 
-  String conteudo[obterCarrosTamanho()];
+  String conteudo[obterCarrosTamanho() + 1];
+
+  conteudo[0] = "cancelar";
   // int linhas[obterCarrosTamanho()];
   for (int i = 0; i < obterCarrosTamanho(); i++) {
-    conteudo[i] = stringf(100, "%d. %s", i + 1, obterCarros()[i].nome);
+    
+    Carro* carro = &obterCarros()[i];
+    conteudo[i + 1] = stringf(150, "%s%s", carro->nome,
+                          carro->energiaAtual == carro->capacidade ? "(cheio)"
+                          : carro->emRecarga ? "(carregando)"
+                                            : "");
   }
 
-  int opcao = criarMenuSwitch("escolha de carro", conteudo, 3);
+  while (1) {
 
-  recarga->carroId = opcao - 1;
+    int opcao = criarMenuSwitch("escolha de carro", conteudo, 3);
+    opcao--;
+    if (opcao == 0) {
+      break;
+    }
+    opcao--;
+    Carro carro = obterCarros()[opcao];
+
+    if (!carro.emRecarga && carro.energiaAtual < carro.capacidade) {
+
+      recarga->carroId = opcao;
+      break;
+    }
+    mostrarErro( carro.emRecarga ? "carro já em recarga" : "carro já abastecido");
+    
+  }
 }
 
 void definirRecargaPosto() {
@@ -68,7 +91,8 @@ MenuConteudoDinamico criarRecargaConteudo() {
   //     stringf(100, "limite de veiculos simultaneos: %d", recarga->energia);
 
   String opcoes[9] = {"0. fechar",         "", "1. escolher carro", "",
-                      "2. escolher posto", "", "3. mudar energia", "", "4. salvar"};
+                      "2. escolher posto", "", "3. mudar energia",  "",
+                      "4. salvar"};
 
   String *tabela[2] = {preview, opcoes};
   int tamanhos[2] = {previewTamanho, len(opcoes)};
@@ -82,6 +106,9 @@ void inserirRecargaMenu() {
   recarga = malloc(sizeof(Recarga));
   recarga->energia = 100;
   recarga->carroId = 0;
+  recarga->concluido=0;
+  recarga->carregado=0;
+  recarga->notificado=0;
   recarga->postoId = 0;
   recarga->dia = 0;
   recarga->horario = 0;
@@ -104,6 +131,7 @@ void inserirRecargaMenu() {
       opcoes[selecionado]();
       break;
     case 3:
+      obterCarros()[recarga->carroId].emRecarga = 1;
       adicionarRecarga(*recarga);
       return;
     default:

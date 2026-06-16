@@ -61,12 +61,12 @@ int tamanhoColuna(int colunas) {
 
 
 void limpar() {
-  // if (eWindows) {
-  //     system("cls");
-  // }
-  // else {
-  //   printf("\033c");
-  // }
+  if (eWindows) {
+      system("cls");
+  }
+  else {
+    printf("\033c");
+  }
 }
 
 

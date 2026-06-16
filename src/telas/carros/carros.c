@@ -1,5 +1,6 @@
 #include "../../../utils/utils.h"
 #include "../../data.h"
+#include "inserir.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -27,7 +28,7 @@ void carrosF() {
     Carro carro = obterCarros()[i];
     tamanhos[i] = carro.asciiTamanho + 2;
     textos[i] = malloc((tamanhos[i]) * sizeof(String));
-    textos[i][0] = stringf(100, "%s", carro.nome);
+    textos[i][0] = stringf(100, "%d. %s", i+1, carro.nome);
     copiarEm(textos[i], carro.ascii, 1, carro.asciiTamanho);
 
     textos[i][carro.asciiTamanho + 1] = stringf(
@@ -35,5 +36,22 @@ void carrosF() {
   }
 
   criarTabelaMultilinha(textos, len(textos), tamanhos, 2);
-  pausar();
+  while (1) {
+
+    int escolha = 0;
+    printf("digite 0 para sair ou o numero de algum carro para editar: ");
+    scanf("%d", &escolha);
+
+    if (escolha > -1 && escolha <= obterCarrosTamanho()) {
+      limpar();
+        if (escolha == 0) {
+            break;
+        }
+        escolha--;
+        editar(&obterCarros()[escolha]);
+        inserir();
+        break;
+    }
+    mostrarErro("opcao invalida");
+  }
 }

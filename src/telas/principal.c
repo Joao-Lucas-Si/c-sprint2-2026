@@ -5,6 +5,7 @@
 #include "creditos.h"
 #include "postos/opcao_postos.h"
 #include "recargas/opcao_recarga.h"
+#include "notificacoes.h"
 #include <stdio.h>
 void passarTempo() {
   int horas;
@@ -13,6 +14,8 @@ void passarTempo() {
   scanf("%d", &horas);
 
   passarHoras(horas);
+
+  visualizarMudancas();
 }
 
 void menuPrincipal() {
@@ -32,7 +35,7 @@ void menuPrincipal() {
   copiarEm(fechar, porta.conteudo, 1, porta.linhas);
 
   String visualizar[carro.linhas + 1];
-  visualizar[0] = "1. visualizar";
+  visualizar[0] = "1. carros";
   copiarEm(visualizar, carro.conteudo, 1, carro.linhas);
 
 

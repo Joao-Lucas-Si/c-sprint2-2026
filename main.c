@@ -27,6 +27,7 @@
 #include "src/telas/postos/visualizar_postos.c"
 #include "src/telas/recargas/inserir_recarga.c"
 #include "src/telas/recargas/visualizar_recarga.c"
+#include "src/telas/notificacoes.c"
 
 int main() {
   iniciarBanco();

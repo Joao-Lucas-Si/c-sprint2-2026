@@ -18,12 +18,13 @@ void iniciarBanco() {
     ler_arquivo(data.postos, Posto, postosCaminho);
     data.recargas = malloc(data.recargaTamanho * sizeof(Recarga));
     ler_arquivo(data.recargas, Recarga, recargasCaminho);
-    
+
   } else {
     data.carrosTamanho = 0;
     data.carros = malloc(sizeof(Carro));
     data.horas = 12;
     data.postosTamanho = 0;
+    
     data.recargaTamanho = 0;
     data.recargas = malloc(sizeof(Recarga));
     data.postos = malloc(sizeof(Posto));
@@ -45,11 +46,11 @@ void salvar() {
   escreverArquivoUnico(&data, Data, dataSimplesCaminho);
   escreverArquivoTamanho(data.carros, data.carrosTamanho, Carro, carrosCaminho);
   escreverArquivoTamanho(data.postos, data.postosTamanho, Posto, postosCaminho);
-  escreverArquivoTamanho(data.recargas, data.recargaTamanho, Recarga, recargasCaminho);
+  escreverArquivoTamanho(data.recargas, data.recargaTamanho, Recarga,
+                         recargasCaminho);
 }
 
 int obterHoras() { return data.horas; }
-
 
 int obterDias() { return data.dias; }
 
@@ -96,6 +97,8 @@ void adicionarPosto(Posto posto) {
 }
 
 void adicionarRecarga(Recarga recarga) {
+
+  pausar();
   if (data.semRecargas) {
     data.recargas[0] = recarga;
     data.semRecargas = 0;
@@ -108,10 +111,42 @@ void adicionarRecarga(Recarga recarga) {
   salvar();
 }
 
-void passarHoras(int horas) { 
-  data.horas = (data.horas + horas) ;
+void passarHoras(int horas) {
+  data.horas = (data.horas + horas);
   if (data.horas >= 24) {
     data.dias += data.horas / 24;
     data.horas %= 24;
   }
+
+  for (int i = 0; i < obterRecargasTamanho(); i++) {
+    Recarga *recarga = &obterRecargas()[i];
+    if (!recarga->concluido) {
+
+      Posto *posto = &obterPostos()[recarga->postoId];
+      Carro *carro = &obterCarros()[recarga->carroId];
+
+      int total = horas * posto->capacidade;
+      if (recarga->carregado > 0 &&
+          (recarga->carregado + total) > recarga->energia) {
+        int resto = (recarga->carregado + total) % recarga->energia;
+
+        carro->energiaAtual += resto;
+        recarga->carregado = recarga->energia;
+      } else {
+        carro->energiaAtual += total;
+        recarga->carregado += total;
+      }
+
+      if (carro->energiaAtual > carro->capacidade) {
+        carro->energiaAtual = carro->capacidade;
+      }
+
+      if (recarga->carregado == recarga->energia) {
+        carro->emRecarga = 0;
+        recarga->concluido = 1;
+        recarga->notificado = 0;
+      }
+    }
+  }
+  salvar();
 }

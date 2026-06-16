@@ -90,6 +90,11 @@ MenuConteudoDinamico criarConteudoMenu() {
   return conteudo;
 }
 
+void editar(Carro* editado) {
+  carro = editado;
+  
+}
+ 
 void inserir() {
   for (int i = 0; i < len(asciis); i++) {
     String caminho = stringf(100, "assets/ascii/carros/carro_%d.txt", i + 1);
@@ -105,6 +110,8 @@ void inserir() {
     carro->capacidade = 100.0;
     carro->energiaAtual = 100.0;
     carro->modelo = 1;
+    carro->emRecarga = 0;
+    
     salvando = 0;
   } else {
     salvando = 1;

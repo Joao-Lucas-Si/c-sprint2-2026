@@ -10,6 +10,7 @@ typedef struct CarroStruct {
   int asciiTamanho;
   float capacidade;
   float energiaAtual;
+  int emRecarga;
 
 } Carro;
 
@@ -18,17 +19,19 @@ typedef struct {
   int maximo;
   int capacidade;
   int maxVeiculos;
-  int energiaPorDia;
+  // int energiaPorHora;
 
 } Posto;
 
 typedef struct {
   int carroId;
   int energia;
-
+  int carregado;
   int horario;
   int dia;
   int postoId;
+  int concluido;
+  int notificado;
 } Recarga;
 
 typedef enum {
@@ -61,6 +64,8 @@ typedef struct {
 } Data;
 
 void iniciarBanco();
+
+void salvar() ;
 
 int obterCarrosTamanho();
 Carro* obterCarros();

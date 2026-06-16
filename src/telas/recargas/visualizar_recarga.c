@@ -1,5 +1,6 @@
 #include "../../../utils/utils.h"
 #include "../../data.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -13,8 +14,11 @@ void visualizarRecarga() {
   RecargaAgrupada *grupos = NULL;
   int tamanho = 0;
   for (int i = 0; i < obterRecargasTamanho(); i++) {
-    RecargaAgrupada *grupo = NULL;
     Recarga recarga = obterRecargas()[i];
+    if (recarga.concluido) {
+      continue;
+    }
+    RecargaAgrupada *grupo = NULL;
     for (int j = 0; j < tamanho; j++) {
       if (grupos[j].posto == recarga.postoId) {
         grupo = &grupos[j];
@@ -45,9 +49,10 @@ void visualizarRecarga() {
       grupo->tamanho++;
     }
   }
-
-  if (tamanho == 0) {
+  
+  if (tamanho == 0 || !grupos) {
     centralizar("sem recargas ativas", ' ');
+    pausar();
   } else {
     for (int i = 0; i < tamanho; i++) {
       RecargaAgrupada grupo = grupos[i];
@@ -56,7 +61,7 @@ void visualizarRecarga() {
 
       for (int j = 0; j < grupo.tamanho; j++) {
         Carro carro = obterCarros()[grupo.recargas[j].carroId];
-        int tamanho = carro.asciiTamanho + 1;
+        int tamanho = carro.asciiTamanho + 2;
         tamanhos[j] = tamanho;
         String *imagem = malloc(tamanho * sizeof(String));
 
@@ -64,14 +69,16 @@ void visualizarRecarga() {
         int e = carro.asciiTamanho;
         imagem[e] = stringf(100, "energia: %.2f/%.2f", carro.energiaAtual,
                             carro.capacidade);
+        imagem[e + 1] = stringf(100, "nome: %s", carro.nome);
 
         conteudo[j] = imagem;
       }
       centralizar(obterPostos()[grupo.posto].nome, ' ');
       criarTabelaMultilinha(conteudo, grupo.tamanho, tamanhos, 3);
     }
+    pausar();
   }
-  pausar();
+  
   //   String *recargas[obterRecargasTamanho()];
   //   int tamanhos[obterRecargasTamanho()];
   //   ArquivoResultado imagem =
