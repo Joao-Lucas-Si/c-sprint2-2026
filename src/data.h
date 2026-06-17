@@ -16,11 +16,10 @@ typedef struct CarroStruct {
 
 typedef struct {
   char nome[100];
-  int maximo;
   int capacidade;
   int maxVeiculos;
   // int energiaPorHora;
-
+  int veiculosAtuais;
 } Posto;
 
 typedef struct {

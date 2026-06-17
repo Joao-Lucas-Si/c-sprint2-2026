@@ -107,6 +107,8 @@ void adicionarRecarga(Recarga recarga) {
         realloc(data.recargas, (data.recargaTamanho + 1) * sizeof(Recarga));
     data.recargas[data.recargaTamanho] = recarga;
   }
+  Posto *posto = &obterPostos()[recarga.postoId];
+  posto->veiculosAtuais++;
   data.recargaTamanho++;
   salvar();
 }
@@ -126,11 +128,13 @@ void passarHoras(int horas) {
       Carro *carro = &obterCarros()[recarga->carroId];
 
       int total = horas * posto->capacidade;
-      if (recarga->carregado > 0 &&
+      if (
           (recarga->carregado + total) > recarga->energia) {
         int resto = (recarga->carregado + total) % recarga->energia;
 
-        carro->energiaAtual += resto;
+        carro->energiaAtual -= recarga->carregado;
+        
+        carro->energiaAtual += recarga->energia;
         recarga->carregado = recarga->energia;
       } else {
         carro->energiaAtual += total;
@@ -145,6 +149,7 @@ void passarHoras(int horas) {
         carro->emRecarga = 0;
         recarga->concluido = 1;
         recarga->notificado = 0;
+        posto->veiculosAtuais--;
       }
     }
   }

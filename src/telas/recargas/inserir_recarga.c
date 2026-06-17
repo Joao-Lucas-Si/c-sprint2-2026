@@ -14,12 +14,13 @@ void definirRecargaCarro() {
   conteudo[0] = "cancelar";
   // int linhas[obterCarrosTamanho()];
   for (int i = 0; i < obterCarrosTamanho(); i++) {
-    
-    Carro* carro = &obterCarros()[i];
-    conteudo[i + 1] = stringf(150, "%s%s", carro->nome,
-                          carro->energiaAtual == carro->capacidade ? "(cheio)"
-                          : carro->emRecarga ? "(carregando)"
-                                            : "");
+
+    Carro *carro = &obterCarros()[i];
+    conteudo[i + 1] =
+        stringf(150, "%s%s", carro->nome,
+                carro->energiaAtual == carro->capacidade ? "(cheio)"
+                : carro->emRecarga                       ? "(carregando)"
+                                                         : "");
   }
 
   while (1) {
@@ -37,8 +38,8 @@ void definirRecargaCarro() {
       recarga->carroId = opcao;
       break;
     }
-    mostrarErro( carro.emRecarga ? "carro já em recarga" : "carro já abastecido");
-    
+    mostrarErro(carro.emRecarga ? "carro já em recarga"
+                                : "carro já abastecido");
   }
 }
 
@@ -46,15 +47,31 @@ void definirRecargaPosto() {
 
   int tamanho = obterPostosTamanho();
 
-  String conteudo[tamanho];
+  String conteudo[tamanho + 1];
+  conteudo[0] = "cancelar";
   // int linhas[obterCarrosTamanho()];
   for (int i = 0; i < tamanho; i++) {
-    conteudo[i] = stringf(100, "%d. %s", i + 1, obterPostos()[i].nome);
+    Posto posto = obterPostos()[i];
+    conteudo[i + 1] = stringf(
+        100, "%s%s", i + 1, posto.nome,
+        posto.veiculosAtuais == posto.maxVeiculos ? "(indisponivel)" : "");
   }
+  while (1) {
 
-  int opcao = criarMenuSwitch("escolha de posto", conteudo, 3);
+    int opcao = criarMenuSwitch("escolha de posto", conteudo, 3);
 
-  recarga->postoId = opcao - 1;
+    if (opcao == 1) {
+      return;
+    }
+    opcao--;
+    Posto p = obterPostos()[opcao];
+
+    if (p.maxVeiculos > p.veiculosAtuais) {
+      recarga->postoId = opcao - 1;
+      break;
+    }
+    mostrarErro("posto indisponivel\n");
+  }
 }
 
 void definirRecargaEnergia() {
@@ -101,15 +118,54 @@ MenuConteudoDinamico criarRecargaConteudo() {
   return resultado;
 }
 
+void recargaErro(String mensagem) {
+  mostrarErro(mensagem);
+  pausar();
+}
+
+int validarRecarga() {
+  for (int i = 0; i < obterCarrosTamanho(); i++) {
+    Carro carro = obterCarros()[i];
+
+    if (carro.capacidade > carro.energiaAtual && !carro.emRecarga) {
+      return i;
+    }
+  }
+
+  return -1;
+}
+
+int validarRecargaPosot() {
+  for (int i = 0; i < obterPostosTamanho(); i++) {
+    Posto posto = obterPostos()[i];
+
+    if (posto.maxVeiculos > posto.veiculosAtuais) {
+      return i;
+    }
+  }
+  return -1;
+}
+
 void inserirRecargaMenu() {
+  int valido = validarRecarga();
+  int postoValido = validarRecargaPosot();
+
+  if (valido == -1) {
+    recargaErro("nenhum carro esta disponivel\n");
+    return;
+  }
+  if (postoValido == -1) {
+    recargaErro("nenhum posto esta disponivel\n");
+    return;
+  }
 
   recarga = malloc(sizeof(Recarga));
   recarga->energia = 100;
-  recarga->carroId = 0;
-  recarga->concluido=0;
-  recarga->carregado=0;
-  recarga->notificado=0;
-  recarga->postoId = 0;
+  recarga->carroId = valido;
+  recarga->concluido = 0;
+  recarga->carregado = 0;
+  recarga->notificado = 0;
+  recarga->postoId = postoValido;
   recarga->dia = 0;
   recarga->horario = 0;
 

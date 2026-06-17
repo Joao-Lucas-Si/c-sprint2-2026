@@ -12,7 +12,6 @@ void visualizarMudancas() {
             Carro carro = obterCarros()[recarga->carroId];
             centralizar(stringf(100, "carro %s terminou sua recarga",carro.nome), ' ');
             recarga->notificado = 1;
-            print("%d",recarga->notificado);
             tamanho++;
         }
     }
