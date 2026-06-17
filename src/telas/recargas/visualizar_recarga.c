@@ -38,18 +38,17 @@ void visualizarRecarga() {
       grupos[tamanho] = b;
       grupo = &grupos[tamanho];
       tamanho++;
-
-      if (grupo->tamanho == 0) {
-        grupo->recargas = malloc(sizeof(recarga));
-      } else {
-        grupo->recargas =
-            realloc(grupo->recargas, (grupo->tamanho + 1) * sizeof(Recarga));
-      }
-      grupo->recargas[grupo->tamanho] = obterRecargas()[i];
-      grupo->tamanho++;
     }
+    if (grupo->tamanho == 0) {
+      grupo->recargas = malloc(sizeof(recarga));
+    } else {
+      grupo->recargas =
+          realloc(grupo->recargas, (grupo->tamanho + 1) * sizeof(Recarga));
+    }
+    grupo->recargas[grupo->tamanho] = obterRecargas()[i];
+    grupo->tamanho++;
   }
-  
+
   if (tamanho == 0 || !grupos) {
     centralizar("sem recargas ativas", ' ');
     pausar();
@@ -78,7 +77,7 @@ void visualizarRecarga() {
     }
     pausar();
   }
-  
+
   //   String *recargas[obterRecargasTamanho()];
   //   int tamanhos[obterRecargasTamanho()];
   //   ArquivoResultado imagem =

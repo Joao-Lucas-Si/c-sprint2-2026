@@ -1,6 +1,7 @@
 #include "inserir_posto.h"
 #include "../../../utils/utils.h"
 #include "../../data.h"
+#include "../../ocpp.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,7 +15,6 @@ void mudarPostoNome() {
 
   strcpy(posto->nome, nome);
 }
-
 
 void mudarPostoCapacidade() {
   int energia;
@@ -32,18 +32,36 @@ void mudarLimiteVeiculos() {
   posto->maxVeiculos = energia;
 }
 
+void mudarTaxa() {
+  float taxa;
+  printf("taxa: ");
+  scanf("%f", &taxa);
+
+  posto->taxa = taxa;
+}
+
+// void mudarCob() {
+//   float taxa;
+//   printf("taxa: ");
+//   scanf("%f", &taxa);
+
+//   posto->taxa = taxa;
+// }
+
 void salvarPosto() {
   if (!salvando) {
     adicionarPosto(*posto);
     salvando = 1;
     posto = &obterPostos()[obterPostosTamanho() - 1];
+    mensagemBoot();
+    pausar();
   }
 }
 
 MenuConteudoDinamico criarConteudo() {
   ArquivoResultado imagem = lerLinhaALinha("assets/ascii/opcoes/posto.txt");
 
-  int previewTamanho = imagem.linhas + 6;
+  int previewTamanho = imagem.linhas + 8;
   String *preview = malloc(previewTamanho * sizeof(String));
 
   preview[0] = "preview";
@@ -58,8 +76,10 @@ MenuConteudoDinamico criarConteudo() {
   preview[i + 3] = "";
   preview[i + 4] =
       stringf(100, "limite de veiculos simultaneos: %d", posto->maxVeiculos);
+  preview[i + 5] = "";
+  preview[i + 6] = stringf(100, "taxa: %.2f", posto->taxa);
 
-  String opcoes[9] = {"0. fechar",
+  String opcoes[11] = {"0. fechar",
                        "",
                        "1. mudar nome",
                        "",
@@ -67,18 +87,18 @@ MenuConteudoDinamico criarConteudo() {
                        "",
                        "3. mudar limite de veiculos",
                        "",
-                        salvando ? "" :"4. salvar"};
+                       "4. mudar taxa",
+                       "",
+                       salvando ? "" : "5. salvar"};
 
   String *tabela[2] = {preview, opcoes};
   int tamanhos[2] = {previewTamanho, len(opcoes)};
-  MenuConteudoDinamico resultado  = {.conteudo = tabela, .tamanho = tamanhos};
+  MenuConteudoDinamico resultado = {.conteudo = tabela, .tamanho = tamanhos};
 
   return resultado;
 }
 
-void editarPosto(Posto* editado) {
-  posto = editado;
-}
+void editarPosto(Posto *editado) { posto = editado; }
 
 void inserirPostoMenu() {
   if (posto) {
@@ -88,10 +108,12 @@ void inserirPostoMenu() {
     posto->capacidade = 40;
     posto->maxVeiculos = 2;
     posto->veiculosAtuais = 0;
+    posto->taxa = 3;
     posto->nome[0] = '\0';
-    salvando=0;
+    salvando = 0;
   }
-  OpcaoMenu opcoes[4] = { mudarPostoNome, mudarPostoCapacidade, mudarLimiteVeiculos, salvarPosto };
+  OpcaoMenu opcoes[5] = {mudarPostoNome, mudarPostoCapacidade,
+                         mudarLimiteVeiculos, mudarTaxa, salvarPosto};
   _criarMenuMultilinhaDinamica("edição de posto", criarConteudo, opcoes,
                                len(opcoes), 2, 2);
 }

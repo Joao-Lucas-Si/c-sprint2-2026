@@ -11,13 +11,20 @@ typedef struct CarroStruct {
   float capacidade;
   float energiaAtual;
   int emRecarga;
-
+  float dividas;
 } Carro;
+
+typedef enum {
+  POR_HORA=1,
+  POR_ENERGIA=2
+} CobrancaTipo;
 
 typedef struct {
   char nome[100];
   int capacidade;
   int maxVeiculos;
+  float taxa;
+  // CobrancaTipo tipoCobranca;
   // int energiaPorHora;
   int veiculosAtuais;
 } Posto;

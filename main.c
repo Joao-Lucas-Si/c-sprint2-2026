@@ -28,6 +28,8 @@
 #include "src/telas/recargas/inserir_recarga.c"
 #include "src/telas/recargas/visualizar_recarga.c"
 #include "src/telas/notificacoes.c"
+#include "src/utils.c"
+#include "src/ocpp.c"
 
 int main() {
   iniciarBanco();

@@ -26,13 +26,14 @@ void carrosF() {
   int tamanhos[obterCarrosTamanho()];
   for (int i = 0; i < obterCarrosTamanho(); i++) {
     Carro carro = obterCarros()[i];
-    tamanhos[i] = carro.asciiTamanho + 2;
+    tamanhos[i] = carro.asciiTamanho + 3;
     textos[i] = malloc((tamanhos[i]) * sizeof(String));
     textos[i][0] = stringf(100, "%d. %s", i+1, carro.nome);
     copiarEm(textos[i], carro.ascii, 1, carro.asciiTamanho);
 
     textos[i][carro.asciiTamanho + 1] = stringf(
         100, "energia: %2.f/%.2f", carro.energiaAtual, carro.capacidade);
+    textos[i][carro.asciiTamanho +2] = stringf(100, "dividas: %.2f R$", carro.dividas);
   }
 
   criarTabelaMultilinha(textos, len(textos), tamanhos, 2);

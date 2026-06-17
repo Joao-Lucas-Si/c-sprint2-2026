@@ -10,7 +10,7 @@ void VisualizarPostos() {
   ArquivoResultado imagem = lerLinhaALinha("assets/ascii/opcoes/posto.txt");
   for (int i = 0; i < obterPostosTamanho(); i++) {
     Posto posto = obterPostos()[i];
-    int tamanho = (imagem.linhas + 3);
+    int tamanho = (imagem.linhas + 4);
     String *linha = malloc(tamanho * sizeof(String));
     tamanhos[i] = tamanho;
     linha[0] = stringf(100, "%s", posto.nome);
@@ -20,6 +20,7 @@ void VisualizarPostos() {
     linha[j] = stringf(100, "capacidade: %d kH/h", posto.capacidade);
     linha[j + 1] = stringf(100, "veiculos sendo carregados: %d/%d ",
                            posto.veiculosAtuais, posto.maxVeiculos);
+    linha[j + 2] = stringf(100, "taxa: %.2f", posto.taxa);
 
     postos[i] = linha;
   }

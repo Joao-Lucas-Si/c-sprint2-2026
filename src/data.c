@@ -1,5 +1,6 @@
 #include "data.h"
 #include "../utils/utils.h"
+#include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 Data data;
@@ -97,8 +98,6 @@ void adicionarPosto(Posto posto) {
 }
 
 void adicionarRecarga(Recarga recarga) {
-
-  pausar();
   if (data.semRecargas) {
     data.recargas[0] = recarga;
     data.semRecargas = 0;
@@ -108,7 +107,9 @@ void adicionarRecarga(Recarga recarga) {
     data.recargas[data.recargaTamanho] = recarga;
   }
   Posto *posto = &obterPostos()[recarga.postoId];
+  Carro *carro = &obterCarros()[recarga.carroId];
   posto->veiculosAtuais++;
+  carro->dividas = calcularCobranca(recarga);
   data.recargaTamanho++;
   salvar();
 }
@@ -127,7 +128,12 @@ void passarHoras(int horas) {
       Posto *posto = &obterPostos()[recarga->postoId];
       Carro *carro = &obterCarros()[recarga->carroId];
 
-      int total = horas * posto->capacidade;
+      int capacidade = posto->capacidade;
+
+      if (posto->maxVeiculos > 3 && posto->veiculosAtuais == posto->maxVeiculos) {
+        capacidade *= 0.8;
+      }
+      int total = horas * capacidade;
       if (
           (recarga->carregado + total) > recarga->energia) {
         int resto = (recarga->carregado + total) % recarga->energia;

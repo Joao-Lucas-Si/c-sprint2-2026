@@ -1,6 +1,7 @@
 #include "inserir_recarga.h"
 #include "../../../utils/utils.h"
 #include "../../data.h"
+#include "../../utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -53,7 +54,7 @@ void definirRecargaPosto() {
   for (int i = 0; i < tamanho; i++) {
     Posto posto = obterPostos()[i];
     conteudo[i + 1] = stringf(
-        100, "%s%s", i + 1, posto.nome,
+        100, "%s%s", posto.nome,
         posto.veiculosAtuais == posto.maxVeiculos ? "(indisponivel)" : "");
   }
   while (1) {
@@ -64,10 +65,11 @@ void definirRecargaPosto() {
       return;
     }
     opcao--;
+    opcao--;
     Posto p = obterPostos()[opcao];
 
     if (p.maxVeiculos > p.veiculosAtuais) {
-      recarga->postoId = opcao - 1;
+      recarga->postoId = opcao;
       break;
     }
     mostrarErro("posto indisponivel\n");
@@ -85,7 +87,7 @@ void definirRecargaEnergia() {
 MenuConteudoDinamico criarRecargaConteudo() {
   ArquivoResultado imagem = lerLinhaALinha("assets/ascii/opcoes/recarga.txt");
 
-  int previewTamanho = imagem.linhas + 6;
+  int previewTamanho = imagem.linhas + 10;
   String *preview = malloc(previewTamanho * sizeof(String));
 
   preview[0] = "preview";
@@ -101,6 +103,18 @@ MenuConteudoDinamico criarRecargaConteudo() {
   preview[i + 2] = stringf(100, "posto: %s", posto->nome);
   preview[i + 3] = "";
   preview[i + 4] = stringf(100, "energia: %d", recarga->energia);
+  preview[i + 5] = "";
+  preview[i + 6] =
+      stringf(100, "valor da cobranca: %.2f%s", calcularCobranca(*recarga),
+              (posto->maxVeiculos > 4 &&
+               posto->veiculosAtuais > (posto->maxVeiculos * 0.7))
+                  ? "(aumento por uso excessivo)"
+                  : "");
+  preview[i + 7] = "";
+  preview[i + 8] =
+      (posto->maxVeiculos > 3 && posto->veiculosAtuais == (posto->maxVeiculos - 1))
+          ? "ativa destribuicao de energia"
+          : "";
   // preview[i + 5] = "";
   // preview[i + 6] = stringf(100, "capacidade por hora: %d", recarga->energia);
   // preview[i + 7] = "";
