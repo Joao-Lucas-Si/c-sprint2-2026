@@ -124,10 +124,10 @@ void inserir() {
     // carro->nome[0]='\0';
     sprintf(carro->nome, "carro");
     carro->capacidade = 100.0;
-    carro->energiaAtual = 0;
+    carro->energiaAtual = 0.0;
     carro->modelo = 1;
     carro->emRecarga = 0;
-    carro->dividas = 0;
+    carro->dividas = 0.0;
     salvando = 0;
   } else {
     salvando = 1;
