@@ -32,7 +32,7 @@
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
   int columns = w.ws_col;
   if (columns == 0) {
-    printf("você está rodando o código pelo output do vscode, é recomendado "
+    printf("voce esta rodando o codigo pelo output do vscode, e recomendado "
            "usar o terminal");
     exit(1);
   }
@@ -44,7 +44,7 @@
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
   int columns = w.ws_row;
   if (columns == 0) {
-    printf("você está rodando o código pelo output do vscode, é recomendado "
+    printf("voce esta rodando o codigo pelo output do vscode, e recomendado "
            "usar o terminal");
     exit(1);
   }

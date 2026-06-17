@@ -39,8 +39,8 @@ void definirRecargaCarro() {
       recarga->carroId = opcao;
       break;
     }
-    mostrarErro(carro.emRecarga ? "carro já em recarga"
-                                : "carro já abastecido");
+    mostrarErro(carro.emRecarga ? "carro ja em recarga"
+                                : "carro ja abastecido");
   }
 }
 
@@ -188,7 +188,7 @@ void inserirRecargaMenu() {
   while (1) {
 
     int selecionado = _criarMenuMultilinhaSwitchDinamico(
-        "edição de posto", criarRecargaConteudo, 2, 2);
+        "edicao de posto", criarRecargaConteudo, 2, 2);
 
     if (selecionado == 0) {
       break;
@@ -205,7 +205,7 @@ void inserirRecargaMenu() {
       adicionarRecarga(*recarga);
       return;
     default:
-      mostrarErro("opção invalida");
+      mostrarErro("opcao invalida");
       break;
     }
   }

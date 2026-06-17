@@ -114,6 +114,6 @@ void inserirPostoMenu() {
   }
   OpcaoMenu opcoes[5] = {mudarPostoNome, mudarPostoCapacidade,
                          mudarLimiteVeiculos, mudarTaxa, salvarPosto};
-  _criarMenuMultilinhaDinamica("edição de posto", criarConteudo, opcoes,
+  _criarMenuMultilinhaDinamica("edicao de posto", criarConteudo, opcoes,
                                len(opcoes), 2, 2);
 }

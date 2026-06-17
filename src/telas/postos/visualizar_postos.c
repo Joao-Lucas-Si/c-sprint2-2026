@@ -32,11 +32,11 @@ void VisualizarPostos() {
                           : largura > 100 ? 2
                                           : 1);
     int opcao;
-    printf("digite 0 para sair ou o número de um posto para editar: ");
+    printf("digite 0 para sair ou o numero de um posto para editar: ");
     scanf("%d", &opcao);
 
     if (opcao < 0 || opcao > obterPostosTamanho()) {
-      mostrarErro("opção invalida\n");
+      mostrarErro("opcao invalida\n");
       continue;
     }
 
