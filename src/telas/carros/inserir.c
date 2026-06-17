@@ -38,17 +38,33 @@ void mudarCarroNome() {
 }
 
 void mudarCarroCapacidade() {
-  float capacidade;
-  printf("capacidade: ");
-  scanf("%f", &capacidade);
-  carro->capacidade = capacidade;
+  while (1) {
+
+    float capacidade;
+    printf("capacidade: ");
+    scanf("%f", &capacidade);
+    if (capacidade >0) {
+
+      carro->capacidade = capacidade;
+      break;
+    }
+    mostrarErro("valor invalido\n");
+  }
 }
 
 void mudarEnergia() {
-  float energia;
-  printf("energia: ");
-  scanf("%f", &energia);
-  carro->energiaAtual = energia;
+  while (1) {
+
+    float energia;
+    printf("energia: ");
+    scanf("%f", &energia);
+    if (energia>=0) {
+
+      carro->energiaAtual = energia;
+      break;
+    }
+    mostrarErro("valor invalido\n");
+  }
 }
 
 void salvaAr() {
@@ -111,7 +127,7 @@ void inserir() {
     carro->energiaAtual = 0;
     carro->modelo = 1;
     carro->emRecarga = 0;
-    
+    carro->dividas = 0;
     salvando = 0;
   } else {
     salvando = 1;

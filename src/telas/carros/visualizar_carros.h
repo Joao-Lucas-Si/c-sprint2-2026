@@ -1,4 +1,4 @@
 #ifndef CarrosH
 #define CarrosH
-void carrosF();
+void visualizarCarros();
 #endif

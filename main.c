@@ -17,7 +17,7 @@
 #include "src/telas/creditos.c"
 #include "src/ui.c"
 #include "src/telas/carros/inserir.c"
-#include "src/telas/carros/carros.c"
+#include "src/telas/carros/visualizar_carros.c"
 #include "src/menu_crud.c"
 #include "src/telas/carros/carro_menu.c"
 #include "src/telas/principal.c"

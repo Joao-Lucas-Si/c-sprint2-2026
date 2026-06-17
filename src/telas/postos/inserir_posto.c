@@ -17,27 +17,49 @@ void mudarPostoNome() {
 }
 
 void mudarPostoCapacidade() {
-  int energia;
-  printf("capacidade: ");
-  scanf("%d", &energia);
+  while (1) {
+    
+    int energia;
+    printf("capacidade: ");
+    scanf("%d", &energia);
+  
+    if (energia > 0) {
 
-  posto->capacidade = energia;
+      posto->capacidade = energia;
+      break;
+    }
+     mostrarErro("valor invalido\n");
+  }
 }
 
 void mudarLimiteVeiculos() {
-  int energia;
-  printf("limite de veiculos simultaneos: ");
-  scanf("%d", &energia);
-
-  posto->maxVeiculos = energia;
+  while (1) {
+    
+    int energia;
+    printf("limite de veiculos simultaneos: ");
+    scanf("%d", &energia);
+    
+    if (energia > 0) {
+    
+      posto->maxVeiculos = energia;
+      break;
+    } 
+    mostrarErro("valor invalido\n");
+  }
 }
 
 void mudarTaxa() {
-  float taxa;
-  printf("taxa: ");
-  scanf("%f", &taxa);
+  while (1) {
+    float taxa;
+    printf("taxa: ");
+    scanf("%f", &taxa);
+    if (taxa > 0) {
+      posto->taxa = taxa;
+      break;
+    }
+    mostrarErro("valor invalido\n");
 
-  posto->taxa = taxa;
+  }
 }
 
 // void mudarCob() {
